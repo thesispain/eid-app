@@ -125,7 +125,8 @@ async function handleLogin() {
 
         // Check lock status
         if (currentUser.lock_until_timestamp) {
-            const lockTime = new Date(currentUser.lock_until_timestamp).getTime();
+            // Convert Postgres UTC string explicitly to Local MS bound
+            const lockTime = new Date(currentUser.lock_until_timestamp + 'Z').getTime();
             if (new Date().getTime() < lockTime) {
                 logActivity('Penalty Active', `User opened app while locked until ${new Date(lockTime).toLocaleTimeString()}`);
                 showPenaltyView(lockTime);
@@ -235,11 +236,14 @@ async function handleAnswerSubmit() {
 }
 
 async function applyPenalty(hours) {
+    // Generate penalty time in clean UTC for the database
     const lockTime = new Date();
     lockTime.setHours(lockTime.getHours() + hours);
+    const utcIsoString = lockTime.toISOString();
 
     if (supabaseClient) {
-        await supabaseClient.from('users').update({ lock_until_timestamp: lockTime.toISOString() }).eq('id', currentUser.id);
+        // We explicitly tell Supabase this is a UTC string so it matches `TIMESTAMPTZ` natively
+        await supabaseClient.from('users').update({ lock_until_timestamp: utcIsoString }).eq('id', currentUser.id);
     }
 
     showPenaltyView(lockTime.getTime());
