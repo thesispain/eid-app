@@ -127,12 +127,16 @@ async function handleLogin() {
         if (currentUser.lock_until_timestamp) {
             const lockTime = new Date(currentUser.lock_until_timestamp).getTime();
             if (new Date().getTime() < lockTime) {
+                logActivity('Penalty Active', `User opened app while locked until ${new Date(lockTime).toLocaleTimeString()}`);
                 showPenaltyView(lockTime);
                 return;
             } else {
                 // Clear lock in DB
+                logActivity('Penalty Expired', 'User returned after penalty expired.');
                 await supabaseClient.from('users').update({ lock_until_timestamp: null }).eq('id', currentUser.id);
             }
+        } else {
+            logActivity('App Opened', 'User loaded the site and bypassed time lock.');
         }
 
         loadNextQuestion();
@@ -144,13 +148,28 @@ async function handleLogin() {
 }
 
 // ----------------------------------------------------
+// Telemetry
+// ----------------------------------------------------
+async function logActivity(eventType, details) {
+    if (!supabaseClient) {
+        console.log(`[DEV LOG] ${eventType}: ${details}`);
+        return;
+    }
+    try {
+        await supabaseClient.from('activity_logs').insert([{ event_type: eventType, details: details }]);
+    } catch (e) {
+        console.error("Failed to log activity:", e);
+    }
+}
+
+// ----------------------------------------------------
 // Core Flow Logic
 // ----------------------------------------------------
 
 async function loadNextQuestion() {
     if (!supabaseClient) {
         // Dev mode mock
-        currentQuestion = { question_text: "How are you remembered in my contacts?", correct_answer: "geet 99.5", step_number: currentUser.current_step };
+        currentQuestion = { question_text: "How are you remembered in my contacts?", correct_answer: "mohsina", step_number: currentUser.current_step };
         document.getElementById('question-text').textContent = currentQuestion.question_text;
         switchView('question');
         return;
@@ -197,6 +216,7 @@ async function handleAnswerSubmit() {
     if (answer === currentQuestion.correct_answer.toLowerCase()) {
         // Correct
         if (currentUser.flow_type === 'person_2' && currentQuestion.step_number === 1) {
+            logActivity('Decoy Passed', `Answered decoy correctly: ${answer}`);
             // Person 2 False Finish Trigger
             triggerPerson2FalseFinish();
         } else {
@@ -209,6 +229,7 @@ async function handleAnswerSubmit() {
         }
     } else {
         // Incorrect formulation -> PENALTY
+        logActivity('Decoy Failed', `Guessed incorrectly: ${answer}`);
         applyPenalty(2); // 2 hours Standard
     }
 }
@@ -290,9 +311,11 @@ async function handleRevealSubmit() {
 
         if (answer === data.current_message_count) {
             // Correct - Reveal Timeline
+            logActivity('Reveal Success', `Guessed the exact secret number: ${answer}`);
             showTimeline();
         } else {
             // INCORRECT - Severe penalty (12 hours to 24 hours)
+            logActivity('Reveal Failed', `Guessed incorrect secret number: ${answer}. Applying major penalty.`);
             applyPenalty(12);
         }
     } catch (err) {

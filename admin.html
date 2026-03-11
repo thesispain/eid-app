@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Admin specific overrides for table visualization */
+        .app-container {
+            max-width: 800px;
+        }
+
+        .admin-table-container {
+            width: 100%;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            color: var(--text-main);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background-color: var(--mustard);
+            color: var(--dark);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .log-row:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .header-spread {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .refresh-btn {
+            background: var(--mustard);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-decor star-1">✦</div>
+    <div class="bg-decor star-2">✦</div>
+    <div class="bg-wave"></div>
+
+    <div class="app-container">
+
+        <!-- Auth View -->
+        <div id="admin-auth-view" class="view">
+            <div class="arch-card dark-arch">
+                <h2>Admin Login</h2>
+                <div class="input-group">
+                    <input type="password" id="admin-password" placeholder="Enter password...">
+                </div>
+                <button id="admin-login-btn" class="primary-btn">Authenticate</button>
+                <p id="admin-error" class="error-text hidden"></p>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="admin-dashboard-view" class="view hidden">
+            <div class="arch-card forest-arch" style="border-radius: 20px;">
+                <div class="header-spread">
+                    <h2>Activity Logs</h2>
+                    <button class="refresh-btn" id="refresh-logs-btn">↻ Refresh</button>
+                </div>
+
+                <div class="admin-table-container">
+                    <table id="logs-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Event Type</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-body">
+                            <!-- Logs injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

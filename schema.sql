@@ -38,12 +38,21 @@ CREATE TABLE timeline_messages (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Activity Logs (For Admin Dashboard)
+CREATE TABLE activity_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    event_type TEXT NOT NULL,
+    details TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Row Level Security (RLS) Setup
 -- Enable RLS on all tables
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE secret_admin_data ENABLE ROW LEVEL SECURITY;
 ALTER TABLE timeline_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
 
 -- Create Policies (Assuming anonymous access for the frontend, but locked down to specific operations)
 
@@ -60,13 +69,17 @@ CREATE POLICY "Allow public read on secret_admin_data" ON secret_admin_data FOR 
 -- Timeline Messages: Anyone can read
 CREATE POLICY "Allow public read on timeline_messages" ON timeline_messages FOR SELECT USING (true);
 
+-- Activity Logs: Anyone can insert, anyone can read (in this simple setup)
+CREATE POLICY "Allow public insert on activity_logs" ON activity_logs FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public read on activity_logs" ON activity_logs FOR SELECT USING (true);
+
 -- INSERT INITIAL DUMMY DATA
 INSERT INTO users (name, flow_type) VALUES
 ('Moh', 'person_2');
 
 -- Moh's actual questions (Following Person 2 secret flow)
 INSERT INTO questions (user_id, question_text, correct_answer, step_number)
-SELECT id, 'What is the exact name I have saved for you in my phone?', 'geet 99.5', 1 FROM users WHERE name = 'Moh';
+SELECT id, 'What is the exact name I have saved for you in my phone?', 'mohsina', 1 FROM users WHERE name = 'Moh';
 
 -- Initial Admin Data
 INSERT INTO secret_admin_data (current_message_count, unblur_revealed) VALUES (42, false);
