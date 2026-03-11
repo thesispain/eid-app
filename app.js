@@ -295,7 +295,7 @@ async function handleRevealSubmit() {
 
     if (!supabaseClient) {
         // Dev mode
-        if (answer === 42) showTimeline();
+        if (answer === 23) showTimeline();
         else applyPenalty(12);
         return;
     }

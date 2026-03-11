@@ -82,7 +82,7 @@ INSERT INTO questions (user_id, question_text, correct_answer, step_number)
 SELECT id, 'What is the exact name I have saved for you in my phone?', 'mohsina', 1 FROM users WHERE name = 'Moh';
 
 -- Initial Admin Data
-INSERT INTO secret_admin_data (current_message_count, unblur_revealed) VALUES (42, false);
+INSERT INTO secret_admin_data (current_message_count, unblur_revealed) VALUES (23, false);
 
 -- Timeline Messages
 INSERT INTO timeline_messages (date, message_content, order_index) VALUES
