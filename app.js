@@ -7,29 +7,36 @@ let currentQuestion = null;
 let countdownInterval = null;
 
 // Initialize Supabase if config exists
-if (typeof CONFIG !== 'undefined' && CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL') {
-    supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-    initApp();
-} else {
-    console.warn("Supabase not configured. Waiting for config.js update...");
-    // Mock initialization for UI testing without DB
-    initAppDevMode();
-}
+// Defer initialization until DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof CONFIG !== 'undefined' && CONFIG.SUPABASE_URL !== 'YOUR_SUPABASE_PROJECT_URL') {
+        supabaseClient = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+        initApp();
+    } else {
+        console.warn("Supabase not configured. Waiting for config.js update...");
+        initAppDevMode();
+    }
+});
 
 // ----------------------------------------------------
 // UI Navigation Controllers
 // ----------------------------------------------------
-const views = {
-    timelock: document.getElementById('timelock-view'),
-    login: document.getElementById('login-view'),
-    question: document.getElementById('question-view'),
-    success: document.getElementById('success-view'),
-    bridge: document.getElementById('bridge-view'),
-    reflection: document.getElementById('reflection-view'),
-    revealQuestion: document.getElementById('reveal-question-view'),
-    timeline: document.getElementById('timeline-view'),
-    penalty: document.getElementById('penalty-view')
-};
+let views = {};
+
+// We populate this inside initApp to ensure DOM is ready
+function initViews() {
+    views = {
+        timelock: document.getElementById('timelock-view'),
+        login: document.getElementById('login-view'),
+        question: document.getElementById('question-view'),
+        success: document.getElementById('success-view'),
+        bridge: document.getElementById('bridge-view'),
+        reflection: document.getElementById('reflection-view'),
+        revealQuestion: document.getElementById('reveal-question-view'),
+        timeline: document.getElementById('timeline-view'),
+        penalty: document.getElementById('penalty-view')
+    };
+}
 
 function switchView(viewName) {
     Object.values(views).forEach(v => v.classList.add('hidden'));
@@ -52,6 +59,7 @@ function hideError(elementId) {
 // Initialization & Global Time Lock
 // ----------------------------------------------------
 function initApp() {
+    initViews();
     setupEventListeners();
     checkGlobalTimeLock();
 }
@@ -59,6 +67,7 @@ function initApp() {
 function initAppDevMode() {
     console.log("Running in DEV mode (No DB connecting)");
     CONFIG = { EID_DATE: '2020-01-01T00:00:00Z' }; // Force past
+    initViews();
     setupEventListeners();
     checkGlobalTimeLock();
 }
