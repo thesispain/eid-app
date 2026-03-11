@@ -72,16 +72,27 @@
             </div>
         </div>
 
+        <!-- Person 2 Emotional Bridge View -->
+        <div id="bridge-view" class="view hidden cinematic-overlay">
+            <div class="bridge-content">
+                <p id="bridge-line-1" class="cinematic-text fade-in-element">Since this is likely the last Eid before
+                    our paths diverge and I slowly fade into the background of your life, I just wanted to ask...</p>
+                <p id="bridge-line-2" class="cinematic-text italic fade-in-element mt-2 hidden">Was I a chapter worth
+                    keeping in your book of memories?</p>
+                <button id="turn-page-btn" class="minimal-btn fade-in-element mt-3 hidden">[ Turn the page ]</button>
+            </div>
+        </div>
+
         <!-- Person 2 Reveal Question View -->
-        <div id="reveal-question-view" class="view hidden">
-            <div class="arch-card dark-arch">
-                <h3 id="reveal-text">Wait. One more question.</h3>
-                <p>Since I made the rule to stop texting, how many times do you think I stopped myself from messaging
-                    you?</p>
+        <div id="reveal-question-view" class="view hidden cinematic-overlay">
+            <div class="reveal-content text-left">
+                <p class="cinematic-text mb-2">If I was... then answer this one last question:</p>
+                <p class="cinematic-text mb-2">Since I made the rule to stop texting, how many times do you think I
+                    stopped myself from messaging you?</p>
                 <div class="input-group">
-                    <input type="number" id="reveal-answer-input" placeholder="0">
+                    <input type="number" id="reveal-answer-input" placeholder="0" class="cinematic-input">
                 </div>
-                <button id="submit-reveal-btn" class="primary-btn">Verify</button>
+                <button id="submit-reveal-btn" class="minimal-btn mt-2">Submit</button>
                 <p id="reveal-error" class="error-text hidden"></p>
             </div>
         </div>

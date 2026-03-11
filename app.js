@@ -24,6 +24,7 @@ const views = {
     login: document.getElementById('login-view'),
     question: document.getElementById('question-view'),
     success: document.getElementById('success-view'),
+    bridge: document.getElementById('bridge-view'),
     revealQuestion: document.getElementById('reveal-question-view'),
     timeline: document.getElementById('timeline-view'),
     penalty: document.getElementById('penalty-view')
@@ -96,6 +97,7 @@ function setupEventListeners() {
     document.getElementById('login-btn').addEventListener('click', handleLogin);
     document.getElementById('submit-answer-btn').addEventListener('click', handleAnswerSubmit);
     document.getElementById('submit-reveal-btn').addEventListener('click', handleRevealSubmit);
+    document.getElementById('turn-page-btn').addEventListener('click', transitionToReveal);
 }
 
 // ----------------------------------------------------
@@ -282,10 +284,49 @@ function triggerPerson2FalseFinish() {
     // Show standard success view first
     switchView('success');
 
-    // Wait 4 seconds, then transition to Reveal Question
+    // Wait 3 seconds, then transition to Cinematic Bridge
+    setTimeout(() => {
+        startCinematicSequence();
+    }, 3000);
+}
+
+function startCinematicSequence() {
+    // Activate dark cinematic theme
+    document.body.classList.add('cinematic-mode');
+    switchView('bridge');
+
+    // Start fade sequences
+    setTimeout(() => {
+        document.getElementById('bridge-line-1').classList.add('visible');
+    }, 100);
+
+    // Wait 2.5s -> show line 2
+    setTimeout(() => {
+        const line2 = document.getElementById('bridge-line-2');
+        line2.classList.remove('hidden');
+        void line2.offsetWidth; // trigger reflow
+        line2.classList.add('visible');
+    }, 2600);
+
+    // Wait 2s more -> show button
+    setTimeout(() => {
+        const btn = document.getElementById('turn-page-btn');
+        btn.classList.remove('hidden');
+        void btn.offsetWidth;
+        btn.classList.add('visible');
+    }, 4600);
+}
+
+function transitionToReveal() {
+    // Fade out bridge contents
+    document.getElementById('bridge-line-1').classList.remove('visible');
+    document.getElementById('bridge-line-2').classList.remove('visible');
+    document.getElementById('turn-page-btn').classList.remove('visible');
+
+    // Switch view after fade out completes
     setTimeout(() => {
         switchView('revealQuestion');
-    }, 4000);
+    }, 1000);
 }
 
 async function handleRevealSubmit() {
