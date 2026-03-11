@@ -375,7 +375,10 @@ async function showTimeline() {
     if (!supabaseClient) {
         // Dev mode populate
         document.getElementById('timeline-container').innerHTML = `
-            <div class="timeline-item"><div class="timeline-date">Jan 1</div><div class="timeline-content">Dev message</div></div>
+            <div class="timeline-item">
+                <div class="timeline-date">Jan 1 <span class="timeline-time">10:00 AM</span></div>
+                <div class="timeline-content secret-text">Dev message</div>
+            </div>
         `;
         return;
     }
@@ -390,8 +393,8 @@ async function showTimeline() {
         const container = document.getElementById('timeline-container');
         container.innerHTML = messages.map(msg => `
             <div class="timeline-item">
-                <div class="timeline-date">${msg.date}</div>
-                <div class="timeline-content">${msg.message_content}</div>
+                <div class="timeline-date">${msg.date} <span class="timeline-time">${msg.time || ''}</span></div>
+                <div class="timeline-content secret-text">${msg.message_content}</div>
             </div>
         `).join('');
     }

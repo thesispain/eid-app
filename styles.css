@@ -316,8 +316,17 @@ select {
 .timeline-date {
     font-weight: 700;
     color: var(--mustard);
-    font-size: 0.9rem;
+    font-size: 1rem;
     margin-bottom: 0.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.timeline-time {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    font-weight: 400;
 }
 
 .timeline-content {
@@ -326,9 +335,10 @@ select {
 }
 
 /* The secret blur */
-.timeline-blurred .timeline-content {
+.timeline-blurred .secret-text {
     filter: blur(6px);
     user-select: none;
+    pointer-events: none;
     transition: filter 1.5s ease;
 }
 
