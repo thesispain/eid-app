@@ -25,6 +25,7 @@ const views = {
     question: document.getElementById('question-view'),
     success: document.getElementById('success-view'),
     bridge: document.getElementById('bridge-view'),
+    reflection: document.getElementById('reflection-view'),
     revealQuestion: document.getElementById('reveal-question-view'),
     timeline: document.getElementById('timeline-view'),
     penalty: document.getElementById('penalty-view')
@@ -97,7 +98,9 @@ function setupEventListeners() {
     document.getElementById('login-btn').addEventListener('click', handleLogin);
     document.getElementById('submit-answer-btn').addEventListener('click', handleAnswerSubmit);
     document.getElementById('submit-reveal-btn').addEventListener('click', handleRevealSubmit);
-    document.getElementById('turn-page-btn').addEventListener('click', transitionToReveal);
+    document.getElementById('turn-page-btn').addEventListener('click', transitionToReflection);
+    document.getElementById('reflection-input').addEventListener('input', handleReflectionInput);
+    document.getElementById('submit-reflection-btn').addEventListener('click', transitionToReveal);
 }
 
 // ----------------------------------------------------
@@ -317,11 +320,40 @@ function startCinematicSequence() {
     }, 4600);
 }
 
-function transitionToReveal() {
+function transitionToReflection() {
     // Fade out bridge contents
     document.getElementById('bridge-line-1').classList.remove('visible');
     document.getElementById('bridge-line-2').classList.remove('visible');
     document.getElementById('turn-page-btn').classList.remove('visible');
+
+    // Switch view after fade out completes
+    setTimeout(() => {
+        switchView('reflection');
+        // Slight delay before fading in elements
+        setTimeout(() => {
+            document.getElementById('reflection-input').classList.add('visible');
+        }, 100);
+    }, 1000);
+}
+
+function handleReflectionInput() {
+    const btn = document.getElementById('submit-reflection-btn');
+    if (document.getElementById('reflection-input').value.trim().length > 0) {
+        btn.classList.remove('hidden');
+        void btn.offsetWidth; // trigger reflow
+        btn.classList.add('visible');
+    } else {
+        btn.classList.remove('visible');
+        // Optional: you could add a timeout to re-add 'hidden' if you want
+    }
+}
+
+function transitionToReveal() {
+    // Fade out reflection contents
+    document.getElementById('reflection-input').classList.remove('visible');
+    document.getElementById('submit-reflection-btn').classList.remove('visible');
+    const introText = document.querySelector('#reflection-view .cinematic-text');
+    if (introText) introText.style.opacity = '0';
 
     // Switch view after fade out completes
     setTimeout(() => {
