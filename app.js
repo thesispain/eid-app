@@ -150,7 +150,7 @@ async function handleLogin() {
 async function loadNextQuestion() {
     if (!supabaseClient) {
         // Dev mode mock
-        currentQuestion = { question_text: "Dev question?", correct_answer: "1", step_number: currentUser.current_step };
+        currentQuestion = { question_text: "How are you remembered in my contacts?", correct_answer: "geet 99.5", step_number: currentUser.current_step };
         document.getElementById('question-text').textContent = currentQuestion.question_text;
         switchView('question');
         return;
