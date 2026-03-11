@@ -176,7 +176,8 @@ async function loadNextQuestion() {
 
         document.getElementById('step-indicator').textContent = `Question ${currentQuestion.step_number}`;
         document.getElementById('question-text').textContent = currentQuestion.question_text;
-        document.getElementById('answer-input').value = '';
+        const options = document.getElementsByName('decoy_answer');
+        for (let i = 0; i < options.length; i++) options[i].checked = false;
         hideError('answer-error');
         switchView('question');
 
@@ -187,7 +188,8 @@ async function loadNextQuestion() {
 }
 
 async function handleAnswerSubmit() {
-    const answer = document.getElementById('answer-input').value.trim().toLowerCase();
+    const selectedOption = document.querySelector('input[name="decoy_answer"]:checked');
+    const answer = selectedOption ? selectedOption.value.trim().toLowerCase() : '';
     hideError('answer-error');
 
     if (!answer) return;

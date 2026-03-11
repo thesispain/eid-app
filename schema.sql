@@ -66,7 +66,7 @@ INSERT INTO users (name, flow_type) VALUES
 
 -- Moh's actual questions (Following Person 2 secret flow)
 INSERT INTO questions (user_id, question_text, correct_answer, step_number)
-SELECT id, 'What is the answer to the first decoy question?', 'answer', 1 FROM users WHERE name = 'Moh';
+SELECT id, 'What is the exact name I have saved for you in my phone?', 'geet 99.5', 1 FROM users WHERE name = 'Moh';
 
 -- Initial Admin Data
 INSERT INTO secret_admin_data (current_message_count, unblur_revealed) VALUES (42, false);

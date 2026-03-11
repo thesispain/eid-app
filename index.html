@@ -48,8 +48,12 @@
             <div class="arch-card mustard-arch">
                 <span class="step-indicator" id="step-indicator">Question 1</span>
                 <h3 id="question-text">Loading question...</h3>
-                <div class="input-group">
-                    <input type="text" id="answer-input" placeholder="Your answer...">
+                <div class="input-group radio-group">
+                    <label><input type="radio" name="decoy_answer" value="GEET 99.5"> GEET 99.5</label>
+                    <label><input type="radio" name="decoy_answer" value="MOH"> MOH</label>
+                    <label><input type="radio" name="decoy_answer" value="MOHSINA"> MOHSINA</label>
+                    <label><input type="radio" name="decoy_answer" value="MOHSINA 99.5"> MOHSINA 99.5</label>
+                    <label><input type="radio" name="decoy_answer" value="FAV STUDENT"> FAV STUDENT</label>
                 </div>
                 <button id="submit-answer-btn" class="primary-btn">Submit</button>
                 <p id="answer-error" class="error-text hidden"></p>
@@ -61,7 +65,7 @@
             <div class="arch-card terracotta-arch">
                 <h2 id="success-title">Eid Mubarak!</h2>
                 <div class="moon-icon">☾</div>
-                <p id="success-message">Wishing you joy, peace, and prosperity.</p>
+                <p id="success-message">Hope you have a brilliant day and get to take a proper break.</p>
                 <div class="gif-container">
                     <img src="https://media.giphy.com/media/xUPGcJzZqQhE9ItcM0/giphy.gif" alt="Eid Greeting" />
                 </div>
@@ -71,8 +75,9 @@
         <!-- Person 2 Reveal Question View -->
         <div id="reveal-question-view" class="view hidden">
             <div class="arch-card dark-arch">
-                <h3 id="reveal-text">Wait... I have another question.</h3>
-                <p>How many times did I try to message you?</p>
+                <h3 id="reveal-text">Wait. One more question.</h3>
+                <p>Since I made the rule to stop texting, how many times do you think I stopped myself from messaging
+                    you?</p>
                 <div class="input-group">
                     <input type="number" id="reveal-answer-input" placeholder="0">
                 </div>
