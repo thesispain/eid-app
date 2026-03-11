@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid Mubarak</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <!-- Background Decor elements -->
+    <div class="bg-decor star-1">✦</div>
+    <div class="bg-decor star-2">✦</div>
+    <div class="bg-decor moon">☾</div>
+    <div class="bg-wave"></div>
+
+    <div class="app-container">
+
+        <!-- Global Time Lock View -->
+        <div id="timelock-view" class="view hidden">
+            <div class="arch-card terracotta-arch">
+                <h2>Ramadan Kareem</h2>
+                <p>The gates will open soon...</p>
+                <div class="countdown" id="countdown-timer">00:00:00</div>
+            </div>
+        </div>
+
+        <!-- Login View -->
+        <div id="login-view" class="view">
+            <div class="arch-card forest-arch">
+                <h2>Welcome</h2>
+                <div class="moon-icon">☾</div>
+                <p>Are you ready?</p>
+                <button id="login-btn" class="primary-btn">Begin</button>
+                <p id="login-error" class="error-text hidden"></p>
+            </div>
+        </div>
+
+        <!-- Question View -->
+        <div id="question-view" class="view hidden">
+            <div class="arch-card mustard-arch">
+                <span class="step-indicator" id="step-indicator">Question 1</span>
+                <h3 id="question-text">Loading question...</h3>
+                <div class="input-group">
+                    <input type="text" id="answer-input" placeholder="Your answer...">
+                </div>
+                <button id="submit-answer-btn" class="primary-btn">Submit</button>
+                <p id="answer-error" class="error-text hidden"></p>
+            </div>
+        </div>
+
+        <!-- Success Greeting View (Standard / Person 1 / Person 2 False Finish) -->
+        <div id="success-view" class="view hidden">
+            <div class="arch-card terracotta-arch">
+                <h2 id="success-title">Eid Mubarak!</h2>
+                <div class="moon-icon">☾</div>
+                <p id="success-message">Wishing you joy, peace, and prosperity.</p>
+                <div class="gif-container">
+                    <img src="https://media.giphy.com/media/xUPGcJzZqQhE9ItcM0/giphy.gif" alt="Eid Greeting" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Person 2 Reveal Question View -->
+        <div id="reveal-question-view" class="view hidden">
+            <div class="arch-card dark-arch">
+                <h3 id="reveal-text">Wait... I have another question.</h3>
+                <p>How many times did I try to message you?</p>
+                <div class="input-group">
+                    <input type="number" id="reveal-answer-input" placeholder="0">
+                </div>
+                <button id="submit-reveal-btn" class="primary-btn">Verify</button>
+                <p id="reveal-error" class="error-text hidden"></p>
+            </div>
+        </div>
+
+        <!-- Person 2 Secret Timeline View -->
+        <div id="timeline-view" class="view hidden">
+            <div class="arch-card forest-arch timeline-card">
+                <h2>The Timeline</h2>
+                <div id="timeline-container" class="timeline-blurred">
+                    <!-- Dynamic messages will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Penalty View -->
+        <div id="penalty-view" class="view hidden">
+            <div class="arch-card dark-arch">
+                <h2>Access Denied</h2>
+                <p>Incorrect answer. You are locked out until:</p>
+                <div class="countdown" id="penalty-timer">00:00:00</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="config.js"
+        onerror="console.warn('config.js not found. Please create one from config.template.js')"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
