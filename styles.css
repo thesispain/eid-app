@@ -432,7 +432,7 @@ body.cinematic-mode .bg-wave {
 .prominent-question {
     font-family: 'Caveat', cursive;
     font-size: 2.8rem;
-    color: var(--text-color);
+    color: var(--mustard);
     line-height: 1.2;
     font-weight: 500;
     margin-top: 3rem;
