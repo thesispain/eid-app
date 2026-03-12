@@ -430,14 +430,14 @@ body.cinematic-mode .bg-wave {
 }
 
 .prominent-question {
-    font-size: 2rem;
+    font-family: 'Caveat', cursive;
+    font-size: 2.8rem;
     color: var(--text-color);
-    line-height: 1.4;
-    letter-spacing: 2px;
-    font-weight: 300;
+    line-height: 1.2;
+    font-weight: 500;
     margin-top: 3rem;
     margin-bottom: 1.5rem;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .fade-in-element {
