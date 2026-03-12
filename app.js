@@ -139,8 +139,7 @@ async function handleLogin() {
 
         // Check lock status
         if (currentUser.lock_until_timestamp) {
-            // Convert Postgres UTC string explicitly to Local MS bound
-            const lockTime = new Date(currentUser.lock_until_timestamp + 'Z').getTime();
+            const lockTime = new Date(currentUser.lock_until_timestamp).getTime();
             if (new Date().getTime() < lockTime) {
                 logActivity('Penalty Active', `User opened app while locked until ${new Date(lockTime).toLocaleTimeString()}`);
                 showPenaltyView(lockTime);
