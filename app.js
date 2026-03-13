@@ -106,10 +106,9 @@ function checkGlobalTimeLock() {
 function setupEventListeners() {
     document.getElementById('login-btn').addEventListener('click', handleLogin);
     document.getElementById('submit-answer-btn').addEventListener('click', handleAnswerSubmit);
-    document.getElementById('submit-reveal-btn').addEventListener('click', handleRevealSubmit);
     document.getElementById('turn-page-btn').addEventListener('click', transitionToReflection);
     document.getElementById('reflection-input').addEventListener('input', handleReflectionInput);
-    document.getElementById('submit-reflection-btn').addEventListener('click', transitionToReveal);
+    document.getElementById('submit-reflection-btn').addEventListener('click', transitionToTimeline);
 }
 
 // ----------------------------------------------------
@@ -356,57 +355,20 @@ function handleReflectionInput() {
     }
 }
 
-function transitionToReveal() {
+function transitionToTimeline() {
     // Fade out reflection contents
     document.getElementById('reflection-input').classList.remove('visible');
     document.getElementById('submit-reflection-btn').classList.remove('visible');
     const introText = document.querySelector('#reflection-view .cinematic-text');
     if (introText) introText.style.opacity = '0';
 
+    // Log that user has completed reflection and moved to timeline
+    logActivity('Reflection Completed', 'User progressed from reflection text to the timeline view.');
+
     // Switch view after fade out completes
     setTimeout(() => {
-        switchView('revealQuestion');
+        showTimeline();
     }, 1000);
-}
-
-async function handleRevealSubmit() {
-    const answer = parseInt(document.getElementById('reveal-answer-input').value, 10);
-    hideError('reveal-error');
-
-    if (isNaN(answer)) {
-        showError('reveal-error', 'Enter a number.');
-        return;
-    }
-
-    if (!supabaseClient) {
-        // Dev mode
-        if (answer === 23) showTimeline();
-        else applyPenalty(12);
-        return;
-    }
-
-    try {
-        // Fetch LIVE target number
-        const { data, error } = await supabaseClient
-            .from('secret_admin_data')
-            .select('current_message_count')
-            .single();
-
-        if (error) throw error;
-
-        if (answer === data.current_message_count) {
-            // Correct - Reveal Timeline
-            logActivity('Reveal Success', `Guessed the exact secret number: ${answer}`);
-            showTimeline();
-        } else {
-            // INCORRECT - Severe penalty (12 hours to 24 hours)
-            logActivity('Reveal Failed', `Guessed incorrect secret number: ${answer}. Applying major penalty.`);
-            applyPenalty(12);
-        }
-    } catch (err) {
-        console.error(err);
-        showError('reveal-error', 'Server error. Try again.');
-    }
 }
 
 async function showTimeline() {
