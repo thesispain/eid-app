@@ -325,7 +325,7 @@ function startCinematicSequence() {
 
     // Wait 2s more -> show button
     setTimeout(() => {
-        const btn = document.getElementById('turn-page-btn');
+        const btn = document.getElementById('begin-slides-btn');
         btn.classList.remove('hidden');
         void btn.offsetWidth;
         btn.classList.add('visible');
