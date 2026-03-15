@@ -31,9 +31,11 @@ function initViews() {
         question: document.getElementById('question-view'),
         success: document.getElementById('success-view'),
         bridge: document.getElementById('bridge-view'),
-        reflection: document.getElementById('reflection-view'),
-        revealQuestion: document.getElementById('reveal-question-view'),
-        timeline: document.getElementById('timeline-view'),
+        'slide-1': document.getElementById('slide-view-1'),
+        'slide-2': document.getElementById('slide-view-2'),
+        'slide-3': document.getElementById('slide-view-3'),
+        'slide-4': document.getElementById('slide-view-4'),
+        'slide-5': document.getElementById('slide-view-5'),
         penalty: document.getElementById('penalty-view')
     };
 }
