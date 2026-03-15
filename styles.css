@@ -521,6 +521,24 @@ body.cinematic-mode .bg-wave {
     color: var(--mustard);
     line-height: 1.5;
     letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.quote-link-wrapper {
+    display: block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.quote-link-wrapper .quote-text {
+    transition: all 0.3s ease;
+}
+
+.quote-link-wrapper:hover .quote-text {
+    color: var(--text-light);
+    text-shadow: 0 0 12px rgba(244, 208, 104, 0.4);
+    transform: scale(1.02);
 }
 
 .cinematic-link {
