@@ -106,9 +106,12 @@ function checkGlobalTimeLock() {
 function setupEventListeners() {
     document.getElementById('login-btn').addEventListener('click', handleLogin);
     document.getElementById('submit-answer-btn').addEventListener('click', handleAnswerSubmit);
-    document.getElementById('turn-page-btn').addEventListener('click', transitionToReflection);
-    document.getElementById('reflection-input').addEventListener('input', handleReflectionInput);
-    document.getElementById('submit-reflection-btn').addEventListener('click', transitionToTimeline);
+    
+    document.getElementById('begin-slides-btn').addEventListener('click', () => transitionToSlide(1));
+    document.getElementById('next-slide-1').addEventListener('click', () => transitionToSlide(2));
+    document.getElementById('next-slide-2').addEventListener('click', () => transitionToSlide(3));
+    document.getElementById('next-slide-3').addEventListener('click', () => transitionToSlide(4));
+    document.getElementById('next-slide-4').addEventListener('click', () => transitionToSlide(5));
 }
 
 // ----------------------------------------------------
@@ -327,96 +330,49 @@ function startCinematicSequence() {
     }, 4600);
 }
 
-function transitionToReflection() {
-    // Fade out bridge contents
-    document.getElementById('bridge-line-1').classList.remove('visible');
-    document.getElementById('bridge-line-2').classList.remove('visible');
-    document.getElementById('turn-page-btn').classList.remove('visible');
+// ----------------------------------------------------
+// Presentation Slides Logic
+// ----------------------------------------------------
 
-    // Switch view after fade out completes
-    setTimeout(() => {
-        switchView('reflection');
-        // Slight delay before fading in elements
+function transitionToSlide(slideNum) {
+    if (slideNum === 1) {
+        // Fade out bridge contents
+        document.getElementById('bridge-line-1').classList.remove('visible');
+        document.getElementById('bridge-line-2').classList.remove('visible');
+        document.getElementById('begin-slides-btn').classList.remove('visible');
+        
+        // Switch view after fade out completes
         setTimeout(() => {
-            document.getElementById('reflection-input').classList.add('visible');
-        }, 100);
-    }, 1000);
-}
-
-function handleReflectionInput() {
-    const btn = document.getElementById('submit-reflection-btn');
-    if (document.getElementById('reflection-input').value.trim().length > 0) {
-        btn.classList.remove('hidden');
-        void btn.offsetWidth; // trigger reflow
-        btn.classList.add('visible');
-    } else {
-        btn.classList.remove('visible');
-        // Optional: you could add a timeout to re-add 'hidden' if you want
-    }
-}
-
-function transitionToTimeline() {
-    // Fade out reflection contents
-    document.getElementById('reflection-input').classList.remove('visible');
-    document.getElementById('submit-reflection-btn').classList.remove('visible');
-    const introText = document.querySelector('#reflection-view .cinematic-text');
-    if (introText) introText.style.opacity = '0';
-
-    // Log that user has completed reflection and moved to timeline
-    logActivity('Reflection Completed', 'User progressed from reflection text to the timeline view.');
-
-    // Switch view after fade out completes
-    setTimeout(() => {
-        showTimeline();
-    }, 1000);
-}
-
-async function showTimeline() {
-    switchView('timeline');
-
-    if (!supabaseClient) {
-        // Dev mode populate
-        document.getElementById('timeline-container').innerHTML = `
-            <div class="timeline-item">
-                <div class="timeline-date">Jan 1 <span class="timeline-time">10:00 AM</span></div>
-                <div class="timeline-content secret-text">Dev message</div>
-            </div>
-        `;
+            switchView('slide-1');
+            fadeInSlideContents(1);
+        }, 1000);
         return;
     }
 
-    // Load timeline messages
-    const { data: messages, error } = await supabaseClient
-        .from('timeline_messages')
-        .select('*')
-        .order('order_index', { ascending: true });
+    // Fade out previous slide
+    const prevSlide = document.getElementById(`slide-view-${slideNum - 1}`);
+    const prevElements = prevSlide.querySelectorAll('.fade-in-element');
+    prevElements.forEach(el => el.classList.remove('visible'));
 
-    if (!error && messages) {
-        const container = document.getElementById('timeline-container');
-        container.innerHTML = messages.map(msg => `
-            <div class="timeline-item">
-                <div class="timeline-date">${msg.date} <span class="timeline-time">${msg.time || ''}</span></div>
-                <div class="timeline-content secret-text">${msg.message_content}</div>
-            </div>
-        `).join('');
-    }
+    setTimeout(() => {
+        switchView(`slide-${slideNum}`);
+        fadeInSlideContents(slideNum);
+    }, 1000);
+}
 
-    // Subscribe to unblur toggler in REAL-TIME
-    supabase
-        .channel('admin_changes')
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'secret_admin_data' }, payload => {
-            const isUnblurred = payload.new.unblur_revealed;
-            if (isUnblurred) {
-                document.getElementById('timeline-container').classList.remove('timeline-blurred');
-            } else {
-                document.getElementById('timeline-container').classList.add('timeline-blurred');
-            }
-        })
-        .subscribe();
+function fadeInSlideContents(slideNum) {
+    const slideId = `slide-view-${slideNum}`;
+    const slideItems = document.querySelectorAll(`#${slideId} .fade-in-element`);
+    
+    slideItems.forEach((el, index) => {
+        setTimeout(() => {
+            el.classList.remove('hidden');
+            void el.offsetWidth; // trigger reflow
+            el.classList.add('visible');
+        }, 100 + (index * 1500)); // Stagger fade in by a second and a half each
+    });
 
-    // Initial fetch for state
-    const { data: adminData } = await supabase.from('secret_admin_data').select('unblur_revealed').single();
-    if (adminData && adminData.unblur_revealed) {
-        document.getElementById('timeline-container').classList.remove('timeline-blurred');
+    if (slideNum === 5) {
+        logActivity('Flow Completed', 'User reached the final presentation slide.');
     }
 }

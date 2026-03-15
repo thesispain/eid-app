@@ -514,3 +514,32 @@ body.cinematic-mode .bg-wave {
     margin: 0 auto;
     width: 100%;
 }
+
+/* Slide Presentation Styles */
+.quote-text {
+    font-size: 1.4rem;
+    color: var(--mustard);
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+}
+
+.cinematic-link {
+    display: inline-block;
+    color: var(--text-light);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding-bottom: 2px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.cinematic-link:hover {
+    color: var(--mustard);
+    border-color: var(--mustard);
+}
+
+.slide-content {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+}
