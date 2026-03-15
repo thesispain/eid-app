@@ -36,6 +36,7 @@ function initViews() {
         'slide-3': document.getElementById('slide-view-3'),
         'slide-4': document.getElementById('slide-view-4'),
         'slide-5': document.getElementById('slide-view-5'),
+        'slide-6': document.getElementById('slide-view-6'),
         penalty: document.getElementById('penalty-view')
     };
 }
@@ -114,6 +115,7 @@ function setupEventListeners() {
     document.getElementById('next-slide-2').addEventListener('click', () => transitionToSlide(3));
     document.getElementById('next-slide-3').addEventListener('click', () => transitionToSlide(4));
     document.getElementById('next-slide-4').addEventListener('click', () => transitionToSlide(5));
+    document.getElementById('next-slide-5').addEventListener('click', () => transitionToSlide(6));
 }
 
 // ----------------------------------------------------
@@ -374,7 +376,7 @@ function fadeInSlideContents(slideNum) {
         }, 100 + (index * 1500)); // Stagger fade in by a second and a half each
     });
 
-    if (slideNum === 5) {
+    if (slideNum === 6) {
         logActivity('Flow Completed', 'User reached the final presentation slide.');
     }
 }
